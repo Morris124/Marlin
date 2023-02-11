@@ -22,11 +22,11 @@
 
 #include "../../inc/MarlinConfig.h"
 
-#if HAS_SOUND
+#if HAS_BUZZER
 
 #include "../gcode.h"
 
-#include "../../lcd/marlinui.h" // i2c-based BUZZ
+#include "../../lcd/ultralcd.h" // i2c-based BUZZ
 #include "../../libs/buzzer.h"  // Buzzer, if possible
 
 /**
@@ -42,4 +42,4 @@ void GcodeSuite::M300() {
   BUZZ(duration, frequency);
 }
 
-#endif // HAS_SOUND
+#endif // HAS_BUZZER
