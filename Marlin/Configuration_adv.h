@@ -645,7 +645,7 @@
  * Multiple extruders can be assigned to the same pin in which case
  * the fan will turn on when any selected extruder is above the threshold.
  */
-#define E0_AUTO_FAN_PIN -1
+#define E0_AUTO_FAN_PIN FAN1_PIN
 #define E1_AUTO_FAN_PIN -1
 #define E2_AUTO_FAN_PIN -1
 #define E3_AUTO_FAN_PIN -1
@@ -1577,7 +1577,7 @@
    * an option on the LCD screen to continue the print from the last-known
    * point in the file.
    */
-  //#define POWER_LOSS_RECOVERY
+  #define POWER_LOSS_RECOVERY
   #if ENABLED(POWER_LOSS_RECOVERY)
     #define PLR_ENABLED_DEFAULT   false // Power Loss Recovery enabled by default. (Set with 'M413 Sn' & M500)
     //#define BACKUP_POWER_SUPPLY       // Backup power / UPS to move the steppers on power loss
@@ -2102,14 +2102,14 @@
 
   //#define BABYSTEP_DISPLAY_TOTAL          // Display total babysteps since last G28
 
-  //#define BABYSTEP_ZPROBE_OFFSET          // Combine M851 Z and Babystepping
+  #define BABYSTEP_ZPROBE_OFFSET          // Combine M851 Z and Babystepping
   //#define BABYSTEP_GLOBAL_Z               // Combine M424 Z and Babystepping
 
   #if EITHER(BABYSTEP_ZPROBE_OFFSET, BABYSTEP_GLOBAL_Z)
     #if ENABLED(BABYSTEP_ZPROBE_OFFSET)
       //#define BABYSTEP_HOTEND_Z_OFFSET    // For multiple hotends, babystep relative Z offsets
     #endif
-    //#define BABYSTEP_GFX_OVERLAY          // Enable graphical overlay on Z-offset editor
+    #define BABYSTEP_GFX_OVERLAY          // Enable graphical overlay on Z-offset editor
   #endif
 #endif
 
@@ -2741,7 +2741,7 @@
   #define INTERPOLATE      true
 
   #if AXIS_IS_TMC_CONFIG(X)
-    #define X_CURRENT       650        // (mA) RMS current. Multiply by 1.414 for peak current.
+    #define X_CURRENT       520        // (mA) RMS current. Multiply by 1.414 for peak current.
     #define X_CURRENT_HOME  X_CURRENT  // (mA) RMS current for sensorless homing
     #define X_MICROSTEPS     16        // 0..256
     #define X_RSENSE          0.11     // Multiplied x1000 for TMC26X
@@ -2751,7 +2751,7 @@
   #endif
 
   #if AXIS_IS_TMC_CONFIG(X2)
-    #define X2_CURRENT      800
+    #define X2_CURRENT      520
     #define X2_CURRENT_HOME X2_CURRENT
     #define X2_MICROSTEPS    X_MICROSTEPS
     #define X2_RSENSE         0.11
@@ -2761,7 +2761,7 @@
   #endif
 
   #if AXIS_IS_TMC_CONFIG(Y)
-    #define Y_CURRENT       650
+    #define Y_CURRENT       520
     #define Y_CURRENT_HOME  Y_CURRENT
     #define Y_MICROSTEPS     16
     #define Y_RSENSE          0.11
@@ -2771,7 +2771,7 @@
   #endif
 
   #if AXIS_IS_TMC_CONFIG(Y2)
-    #define Y2_CURRENT      800
+    #define Y2_CURRENT      520
     #define Y2_CURRENT_HOME Y2_CURRENT
     #define Y2_MICROSTEPS    Y_MICROSTEPS
     #define Y2_RSENSE         0.11
@@ -2781,7 +2781,7 @@
   #endif
 
   #if AXIS_IS_TMC_CONFIG(Z)
-    #define Z_CURRENT       580
+    #define Z_CURRENT       1040
     #define Z_CURRENT_HOME  Z_CURRENT
     #define Z_MICROSTEPS     16
     #define Z_RSENSE          0.11
@@ -2791,7 +2791,7 @@
   #endif
 
   #if AXIS_IS_TMC_CONFIG(Z2)
-    #define Z2_CURRENT      800
+    #define Z2_CURRENT      1040
     #define Z2_CURRENT_HOME Z2_CURRENT
     #define Z2_MICROSTEPS    Z_MICROSTEPS
     #define Z2_RSENSE         0.11
@@ -2890,7 +2890,7 @@
   #endif
 
   #if AXIS_IS_TMC_CONFIG(E1)
-    #define E1_CURRENT      800
+    #define E1_CURRENT      650
     #define E1_MICROSTEPS   E0_MICROSTEPS
     #define E1_RSENSE         0.11
     #define E1_CHAIN_POS     -1
@@ -3054,7 +3054,7 @@
     #define STEALTHCHOP_U
     #define STEALTHCHOP_V
     #define STEALTHCHOP_W
-    #define STEALTHCHOP_E
+    //#define STEALTHCHOP_E
   #endif
 
   /**
@@ -3109,7 +3109,7 @@
    * M912 - Clear stepper driver overtemperature pre-warn condition flag.
    * M122 - Report driver parameters (Requires TMC_DEBUG)
    */
-  //#define MONITOR_DRIVER_STATUS
+  #define MONITOR_DRIVER_STATUS
 
   #if ENABLED(MONITOR_DRIVER_STATUS)
     #define CURRENT_STEP_DOWN     50  // [mA]
@@ -3223,7 +3223,7 @@
    * Enable M122 debugging command for TMC stepper drivers.
    * M122 S0/1 will enable continuous reporting.
    */
-  //#define TMC_DEBUG
+  #define TMC_DEBUG
 
   /**
    * You can set your own advanced settings by filling in predefined functions.
