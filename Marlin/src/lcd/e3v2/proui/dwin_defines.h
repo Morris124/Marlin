@@ -19,6 +19,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
+#pragma once
+
 /**
  * DWIN general defines and data structs for PRO UI
  * Author: Miguel A. Risco-Castillo (MRISCOC)
@@ -26,10 +28,7 @@
  * Date: 2022/08/08
  */
 
-#pragma once
-
 //#define DEBUG_DWIN 1
-//#define NEED_HEX_PRINT 1
 
 #if defined(__STM32F1__) || defined(STM32F1)
   #define DASH_REDRAW 1
