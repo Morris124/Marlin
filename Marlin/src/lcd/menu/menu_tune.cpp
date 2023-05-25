@@ -109,7 +109,7 @@
 
 void menu_tune() {
   START_MENU();
-  BACK_ITEM(MSG_MAIN_MENU);
+  BACK_ITEM(MSG_MAIN);
 
   //
   // Speed:
@@ -120,7 +120,7 @@ void menu_tune() {
   // Manual bed leveling, Bed Z:
   //
   #if BOTH(MESH_BED_LEVELING, LCD_BED_LEVELING)
-    EDIT_ITEM(float43, MSG_MESH_Z_OFFSET, &bedlevel.z_offset, -1, 1);
+    EDIT_ITEM(float43, MSG_BED_Z, &bedlevel.z_offset, -1, 1);
   #endif
 
   //
@@ -153,40 +153,40 @@ void menu_tune() {
 
     DEFINE_SINGLENOZZLE_ITEM();
 
-    #if FAN_IS_M106ABLE(0)
-      _FAN_EDIT_ITEMS(0, FIRST_FAN_SPEED);
+    #if HAS_FAN0
+      _FAN_EDIT_ITEMS(0,FIRST_FAN_SPEED);
     #endif
-    #if FAN_IS_M106ABLE(1)
+    #if HAS_FAN1
       FAN_EDIT_ITEMS(1);
     #elif SNFAN(1)
       singlenozzle_item(1);
     #endif
-    #if FAN_IS_M106ABLE(2)
+    #if HAS_FAN2
       FAN_EDIT_ITEMS(2);
     #elif SNFAN(2)
       singlenozzle_item(2);
     #endif
-    #if FAN_IS_M106ABLE(3)
+    #if HAS_FAN3
       FAN_EDIT_ITEMS(3);
     #elif SNFAN(3)
       singlenozzle_item(3);
     #endif
-    #if FAN_IS_M106ABLE(4)
+    #if HAS_FAN4
       FAN_EDIT_ITEMS(4);
     #elif SNFAN(4)
       singlenozzle_item(4);
     #endif
-    #if FAN_IS_M106ABLE(5)
+    #if HAS_FAN5
       FAN_EDIT_ITEMS(5);
     #elif SNFAN(5)
       singlenozzle_item(5);
     #endif
-    #if FAN_IS_M106ABLE(6)
+    #if HAS_FAN6
       FAN_EDIT_ITEMS(6);
     #elif SNFAN(6)
       singlenozzle_item(6);
     #endif
-    #if FAN_IS_M106ABLE(7)
+    #if HAS_FAN7
       FAN_EDIT_ITEMS(7);
     #elif SNFAN(7)
       singlenozzle_item(7);

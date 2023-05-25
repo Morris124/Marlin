@@ -27,7 +27,7 @@
 #include "touch.h"
 
 #include "../marlinui.h"  // for ui methods
-#include "../menu/menu_item.h" // for MSG_FIRST_FAN_SPEED
+#include "../menu/menu_item.h" // for touch_screen_calibration
 
 #include "../../module/temperature.h"
 #include "../../module/planner.h"
@@ -113,8 +113,10 @@ void Touch::idle() {
     if (x != 0 && y != 0) {
       if (current_control) {
         if (WITHIN(x, current_control->x - FREE_MOVE_RANGE, current_control->x + current_control->width + FREE_MOVE_RANGE) && WITHIN(y, current_control->y - FREE_MOVE_RANGE, current_control->y + current_control->height + FREE_MOVE_RANGE)) {
-          LIMIT(x, current_control->x, current_control->x + current_control->width);
-          LIMIT(y, current_control->y, current_control->y + current_control->height);
+          NOLESS(x, current_control->x);
+          NOMORE(x, current_control->x + current_control->width);
+          NOLESS(y, current_control->y);
+          NOMORE(y, current_control->y + current_control->height);
           touch(current_control);
         }
         else
@@ -152,7 +154,7 @@ void Touch::touch(touch_control_t *control) {
       case CALIBRATE:
         if (touch_calibration.handleTouch(x, y)) ui.refresh();
         break;
-    #endif
+    #endif // TOUCH_SCREEN_CALIBRATION
 
     case MENU_SCREEN: ui.goto_screen((screenFunc_t)control->data); break;
     case BACK: ui.goto_previous_screen(); break;
@@ -222,19 +224,15 @@ void Touch::touch(touch_control_t *control) {
       ui.clear_lcd();
       MenuItem_int3::action(GET_TEXT_F(MSG_SPEED), &feedrate_percentage, 10, 999);
       break;
-
-    #if HAS_EXTRUDERS
-      case FLOWRATE:
-        ui.clear_lcd();
-        MenuItemBase::itemIndex = control->data;
-        #if EXTRUDERS == 1
-          MenuItem_int3::action(GET_TEXT_F(MSG_FLOW), &planner.flow_percentage[MenuItemBase::itemIndex], 10, 999, []{ planner.refresh_e_factor(MenuItemBase::itemIndex); });
-        #else
-          MenuItem_int3::action(GET_TEXT_F(MSG_FLOW_N), &planner.flow_percentage[MenuItemBase::itemIndex], 10, 999, []{ planner.refresh_e_factor(MenuItemBase::itemIndex); });
-        #endif
-        break;
-    #endif
-
+    case FLOWRATE:
+      ui.clear_lcd();
+      MenuItemBase::itemIndex = control->data;
+      #if EXTRUDERS == 1
+        MenuItem_int3::action(GET_TEXT_F(MSG_FLOW), &planner.flow_percentage[MenuItemBase::itemIndex], 10, 999, []{ planner.refresh_e_factor(MenuItemBase::itemIndex); });
+      #else
+        MenuItem_int3::action(GET_TEXT_F(MSG_FLOW_N), &planner.flow_percentage[MenuItemBase::itemIndex], 10, 999, []{ planner.refresh_e_factor(MenuItemBase::itemIndex); });
+      #endif
+      break;
     case STOP:
       ui.goto_screen([]{
         MenuItem_confirm::select_screen(GET_TEXT_F(MSG_BUTTON_STOP),
@@ -270,18 +268,19 @@ void Touch::hold(touch_control_t *control, millis_t delay) {
 bool Touch::get_point(int16_t *x, int16_t *y) {
   #if ENABLED(TFT_TOUCH_DEVICE_XPT2046)
     #if ENABLED(TOUCH_SCREEN_CALIBRATION)
-      const bool is_touched = (touch_calibration.calibration.orientation == TOUCH_PORTRAIT ? io.getRawPoint(y, x) : io.getRawPoint(x, y));
+      bool is_touched = (touch_calibration.calibration.orientation == TOUCH_PORTRAIT ? io.getRawPoint(y, x) : io.getRawPoint(x, y));
+
       if (is_touched && touch_calibration.calibration.orientation != TOUCH_ORIENTATION_NONE) {
         *x = int16_t((int32_t(*x) * touch_calibration.calibration.x) >> 16) + touch_calibration.calibration.offset_x;
         *y = int16_t((int32_t(*y) * touch_calibration.calibration.y) >> 16) + touch_calibration.calibration.offset_y;
       }
     #else
-      const bool is_touched = (TOUCH_ORIENTATION == TOUCH_PORTRAIT ? io.getRawPoint(y, x) : io.getRawPoint(x, y));
+      bool is_touched = (TOUCH_ORIENTATION == TOUCH_PORTRAIT ? io.getRawPoint(y, x) : io.getRawPoint(x, y));
       *x = uint16_t((uint32_t(*x) * TOUCH_CALIBRATION_X) >> 16) + TOUCH_OFFSET_X;
       *y = uint16_t((uint32_t(*y) * TOUCH_CALIBRATION_Y) >> 16) + TOUCH_OFFSET_Y;
     #endif
   #elif ENABLED(TFT_TOUCH_DEVICE_GT911)
-    const bool is_touched = (TOUCH_ORIENTATION == TOUCH_PORTRAIT ? io.getPoint(y, x) : io.getPoint(x, y));
+    bool is_touched = (TOUCH_ORIENTATION == TOUCH_PORTRAIT ? io.getPoint(y, x) : io.getPoint(x, y));
   #endif
   #if HAS_TOUCH_SLEEP
     if (is_touched)
